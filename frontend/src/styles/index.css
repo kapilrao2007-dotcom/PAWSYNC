@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-charcoal-100;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    @apply bg-cream-100 text-charcoal-800 font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-charcoal-900;
+  }
+
+  ::selection {
+    @apply bg-coral-200 text-charcoal-900;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.coral.500');
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply px-6 md:px-10 lg:px-16;
+  }
+
+  .section-py {
+    @apply py-20 md:py-28;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 ease-premium select-none whitespace-nowrap;
+  }
+
+  .btn-primary {
+    @apply btn bg-charcoal-900 text-cream-50 px-6 py-3.5 hover:bg-charcoal-800 active:scale-[0.97] shadow-soft;
+  }
+
+  .btn-accent {
+    @apply btn bg-coral-500 text-cream-50 px-6 py-3.5 hover:bg-coral-600 active:scale-[0.97] shadow-glow;
+  }
+
+  .btn-outline {
+    @apply btn border border-charcoal-300 text-charcoal-800 px-6 py-3.5 hover:border-charcoal-900 hover:bg-charcoal-900 hover:text-cream-50 active:scale-[0.97];
+  }
+
+  .btn-ghost {
+    @apply btn text-charcoal-700 px-4 py-2 hover:text-charcoal-900 hover:bg-charcoal-100;
+  }
+
+  .btn-emergency {
+    @apply btn bg-rescue-500 text-cream-50 px-6 py-3.5 hover:bg-rescue-600 active:scale-[0.97];
+  }
+
+  .card {
+    @apply bg-white rounded-3xl border border-charcoal-100 shadow-card;
+  }
+
+  .glass-surface {
+    @apply bg-cream-50/70 backdrop-blur-lg border border-white/40;
+  }
+
+  .eyebrow {
+    @apply text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-coral-600;
+  }
+
+  .field-label {
+    @apply block text-sm font-medium text-charcoal-700 mb-2;
+  }
+
+  .field-input {
+    @apply w-full rounded-2xl border border-charcoal-200 bg-white px-4 py-3 text-charcoal-900 placeholder:text-charcoal-400 transition-all duration-200 focus:border-coral-400 focus:ring-4 focus:ring-coral-100 outline-none;
+  }
+
+  .field-textarea {
+    @apply field-input resize-none;
+  }
+}
