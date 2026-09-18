@@ -3,7 +3,7 @@ const { body } = require('express-validator');
 const validate = require('../middleware/validate');
 const { protect } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiters');
-const { register, login, getMe, updateMe } = require('../controllers/authController');
+const { register, login, getMe, updateMe, googleAuth, facebookAuth } = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -29,6 +29,9 @@ router.post(
   validate,
   login
 );
+
+router.post('/google', authLimiter, [body('credential').notEmpty().withMessage('Missing Google credential')], validate, googleAuth);
+router.post('/facebook', authLimiter, [body('accessToken').notEmpty().withMessage('Missing Facebook access token')], validate, facebookAuth);
 
 router.get('/me', protect, getMe);
 router.patch('/me', protect, updateMe);

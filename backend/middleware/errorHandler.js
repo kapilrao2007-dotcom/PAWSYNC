@@ -24,6 +24,24 @@ function errorHandler(err, req, res, next) {
     error = new AppError('Authentication token expired', 401);
   }
 
+  // Mongoose/MongoDB connectivity failures (dropped connection mid-request,
+  // server selection timeout, buffering timeout, etc). The dbGuard
+  // middleware catches most of these before a query even runs, but this is
+  // a safety net for a connection that drops WHILE a request is in flight.
+  const isDbConnectivityError =
+    err.name === 'MongoServerSelectionError' ||
+    err.name === 'MongooseServerSelectionError' ||
+    err.name === 'MongoNetworkError' ||
+    err.name === 'MongoNetworkTimeoutError' ||
+    err.name === 'MongoTimeoutError' ||
+    (typeof err.message === 'string' && err.message.includes('buffering timed out'));
+  if (isDbConnectivityError) {
+    error = new AppError(
+      'Lost connection to the database while handling your request. Check that MongoDB is running and reachable, then try again.',
+      503
+    );
+  }
+
   const statusCode = error.statusCode || 500;
   const message = error.isOperational ? error.message : error.message || 'Something went wrong';
 

@@ -58,6 +58,30 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const loginWithGoogle = useCallback(async (credential) => {
+    try {
+      const { data } = await api.post('/auth/google', { credential });
+      localStorage.setItem('pawsync_token', data.token);
+      localStorage.setItem('pawsync_user', JSON.stringify(data.user));
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: getErrorMessage(err) };
+    }
+  }, []);
+
+  const loginWithFacebook = useCallback(async (accessToken) => {
+    try {
+      const { data } = await api.post('/auth/facebook', { accessToken });
+      localStorage.setItem('pawsync_token', data.token);
+      localStorage.setItem('pawsync_user', JSON.stringify(data.user));
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: getErrorMessage(err) };
+    }
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem('pawsync_token');
     localStorage.removeItem('pawsync_user');
@@ -65,7 +89,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, setUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, loginWithGoogle, loginWithFacebook, logout, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -5,9 +5,11 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const { apiLimiter } = require('./middleware/rateLimiters');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
+const requireDb = require('./middleware/dbGuard');
 
 const authRoutes = require('./routes/authRoutes');
 const rescueReportRoutes = require('./routes/rescueReportRoutes');
@@ -69,9 +71,27 @@ app.use('/api', apiLimiter);
 // Local-dev image fallback storage (used only when Cloudinary is not configured)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// This endpoint deliberately sits BEFORE the requireDb guard below, so it
+// always responds - even when Mongo is down - and tells you exactly what
+// state the database connection is in. If you're seeing 500s in the app,
+// check this first: http://localhost:5000/api/health
+const DB_STATE_LABELS = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, service: 'pawsync-backend', status: 'ok', time: new Date().toISOString() });
+  const dbState = mongoose.connection.readyState;
+  res.json({
+    success: true,
+    service: 'pawsync-backend',
+    status: 'ok',
+    db: DB_STATE_LABELS[dbState] || 'unknown',
+    time: new Date().toISOString(),
+  });
 });
+
+// Every route below this line touches MongoDB. If the connection has been
+// lost since boot (mongod stopped, Atlas hiccup, etc.), fail fast with a
+// clear 503 instead of letting each query buffer for ~10s and surface as a
+// confusing generic 500.
+app.use('/api', requireDb);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/rescue-reports', rescueReportRoutes);

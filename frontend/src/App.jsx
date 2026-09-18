@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/layout/ScrollToTop';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import SplashScreen from './components/layout/SplashScreen';
 
 import Home from './pages/Home';
 import ReportAnimal from './pages/ReportAnimal';
@@ -28,6 +29,7 @@ import AdminDonations from './pages/admin/AdminDonations';
 export default function App() {
   return (
     <>
+      <SplashScreen />
       <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
@@ -52,7 +54,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          {['/about', '/privacy', '/terms', '/contact', '/organizations', '/vets', '/lost-and-found'].map((path) => (
+          {['/about', '/privacy', '/terms', '/contact', '/organizations', '/vets', '/lost-and-found', '/foster'].map((path) => (
             <Route key={path} path={path} element={<ComingSoon />} />
           ))}
           <Route path="*" element={<NotFound />} />

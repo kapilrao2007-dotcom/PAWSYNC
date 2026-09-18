@@ -98,4 +98,8 @@
   .field-textarea {
     @apply field-input resize-none;
   }
+
+  .btn-social {
+    @apply w-full inline-flex items-center justify-center gap-3 rounded-2xl border border-charcoal-200 bg-white px-4 py-3 text-sm font-medium text-charcoal-800 transition-all duration-200 hover:border-charcoal-300 hover:bg-charcoal-50 active:scale-[0.98];
+  }
 }

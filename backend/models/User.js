@@ -15,10 +15,20 @@ const userSchema = new mongoose.Schema(
       match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email'],
     },
     phone: { type: String, trim: true, select: false },
-    password: { type: String, required: true, minlength: 8, select: false },
+    password: {
+      type: String,
+      // Social sign-in accounts (Google/Facebook) never set a local password.
+      required: [function requiresPassword() { return !this.googleId && !this.facebookId; }, 'Password is required'],
+      minlength: 8,
+      select: false,
+    },
     role: { type: String, enum: ROLES, default: 'citizen' },
     avatarUrl: { type: String, default: '' },
     area: { type: String, trim: true, default: '' },
+
+    // Social sign-in identifiers (sparse: most users won't have these)
+    googleId: { type: String, select: false, sparse: true, unique: true, index: true },
+    facebookId: { type: String, select: false, sparse: true, unique: true, index: true },
 
     // Verification & security
     isVerified: { type: Boolean, default: false },
@@ -49,13 +59,14 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ role: 1 });
 
 userSchema.pre('save', async function hashPassword(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password') || !this.password) return next();
   const rounds = Number(process.env.BCRYPT_SALT_ROUNDS) || 12;
   this.password = await bcrypt.hash(this.password, rounds);
   next();
 });
 
 userSchema.methods.comparePassword = function comparePassword(candidate) {
+  if (!this.password) return Promise.resolve(false); // social-only account, no local password
   return bcrypt.compare(candidate, this.password);
 };
 

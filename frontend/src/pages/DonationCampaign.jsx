@@ -99,7 +99,7 @@ export default function DonationCampaign() {
         description: `Donation for ${rescueCase.displayName}`,
         order_id: orderRes.order.id,
         prefill: { name: user?.name || '', email: user?.email || '' },
-        theme: { color: '#D9612D' },
+        theme: { color: '#B87422' },
         handler: async (response) => {
           await finalizePayment({
             orderId: response.razorpay_order_id,

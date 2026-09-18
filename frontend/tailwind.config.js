@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Deep charcoal - primary text & surfaces
+        // Deep charcoal - primary text & surfaces (deepened for more contrast/richness)
         charcoal: {
           50: '#F5F5F4',
           100: '#E7E6E4',
@@ -12,11 +12,11 @@ export default {
           300: '#A8A39C',
           400: '#78726A',
           500: '#524C45',
-          600: '#3A352F',
-          700: '#2A2622',
-          800: '#1D1A17',
-          900: '#141210',
-          950: '#0B0A09',
+          600: '#38332D',
+          700: '#252119',
+          800: '#1A1714',
+          900: '#100E0C',
+          950: '#070606',
         },
         // Warm off-white - background
         cream: {
@@ -39,18 +39,21 @@ export default {
           800: '#293E28',
           900: '#213220',
         },
-        // Warm orange/coral - accent (CTA, highlights)
+        // Burnt gold / amber - accent (CTA, highlights). Token name kept as
+        // "coral" so every existing class (bg-coral-500, text-coral-600, ...)
+        // keeps working - only the hue underneath changed, to a richer,
+        // more premium amber/bronze instead of the previous orange-coral.
         coral: {
-          50: '#FDF3EE',
-          100: '#FBE3D6',
-          200: '#F5C1A6',
-          300: '#EE9C72',
-          400: '#E67B49',
-          500: '#D9612D',
-          600: '#B84C22',
-          700: '#943C1C',
-          800: '#733019',
-          900: '#5C2716',
+          50: '#FBF3E7',
+          100: '#F5E2C6',
+          200: '#EACB93',
+          300: '#DCAD5D',
+          400: '#CB9038',
+          500: '#B87422',
+          600: '#955C1B',
+          700: '#744818',
+          800: '#573717',
+          900: '#402914',
         },
         // Controlled emergency red
         rescue: {
@@ -80,9 +83,9 @@ export default {
         xs: '2px',
       },
       boxShadow: {
-        soft: '0 2px 24px -4px rgba(20, 18, 16, 0.08)',
-        card: '0 8px 30px -8px rgba(20, 18, 16, 0.12)',
-        glow: '0 0 0 1px rgba(217, 97, 45, 0.15), 0 8px 24px -8px rgba(217, 97, 45, 0.35)',
+        soft: '0 2px 28px -4px rgba(16, 14, 12, 0.12)',
+        card: '0 10px 36px -10px rgba(16, 14, 12, 0.16)',
+        glow: '0 0 0 1px rgba(184, 116, 34, 0.18), 0 10px 28px -8px rgba(184, 116, 34, 0.4)',
       },
       borderRadius: {
         '4xl': '2rem',

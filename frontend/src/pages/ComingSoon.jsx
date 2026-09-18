@@ -9,6 +9,7 @@ const TITLES = {
   '/organizations': 'Organization Directory',
   '/vets': 'Veterinary Network',
   '/lost-and-found': 'Lost & Found',
+  '/foster': 'Foster Network',
 };
 
 export default function ComingSoon() {
